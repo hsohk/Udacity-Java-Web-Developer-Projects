@@ -37,6 +37,15 @@
                 <spanb th:text = "${noteError}">Example Error Message</spanb>
                 <span>Click <a th:href="@{/home}">here</a> to continue.</span>
             </div>
+            <div class="alert alert-success fill-parent" th:if="${deleteSuccess}">
+                <h1 class="display-5">Deleted Successfully</h1>
+                <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
+            <div class="alert alert-danger fill-parent" th:if="${deleteError}">
+                <h1 class="display-5">Error</h1>
+                <spanb th:text = "${deleteError}">Example Error Message</spanb>
+                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
         </div>
     </body>
 </html>

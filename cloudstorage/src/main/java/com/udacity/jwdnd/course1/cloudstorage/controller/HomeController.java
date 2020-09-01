@@ -33,16 +33,12 @@ public class HomeController {
         this.encryptionService = encryptionService;
     }
 
-    public void modelUpdate(Authentication authentication, Model model){
+    @GetMapping("/home")
+    public String getHomeView(Authentication authentication, Model model){
         model.addAttribute("files",fileService.getAllFiles(authentication.getName().toString()));
         model.addAttribute("notes",noteService.getAllNotes(authentication.getName().toString()));
         model.addAttribute("credentials",credentialService.getAllCredentials(authentication.getName().toString()));
         model.addAttribute("encryptionService",encryptionService);
-    }
-
-    @GetMapping("/home")
-    public String getHomeView(Authentication authentication, Model model){
-        modelUpdate(authentication, model);
         return "home";
     }
 
@@ -73,9 +69,12 @@ public class HomeController {
 
     @GetMapping("/file/delete/{fileId}")
     public String deleteFile(Authentication authentication, @PathVariable int fileId, Model model) {
-        fileService.delete(authentication.getName().toString(),fileId);
-        model.addAttribute("files",fileService.getAllFiles(authentication.getName().toString()));
-        return "home";
+      if(fileService.delete(authentication.getName().toString(),fileId)<0){
+            model.addAttribute("deleteError","Failed to delete");
+        } else {
+            model.addAttribute("deleteSuccess",true);
+        }
+        return "result";
     }
 
     @GetMapping("/file/view/{fileId}")
@@ -109,16 +108,19 @@ public class HomeController {
         } else {
             model.addAttribute("noteError", error);
         }
-        modelUpdate(authentication, model);
+        model.addAttribute("notes",noteService.getAllNotes(authentication.getName().toString()));
         return "result";
     }
 
     //Delete
     @GetMapping("/note/delete/{noteid}")
     public String deleteNote(Authentication authentication, @PathVariable int noteid, Model model) {
-        noteService.deleteNote(authentication.getName().toString(),noteid);
-        model.addAttribute("notes",noteService.getAllNotes(authentication.getName().toString()));
-        return "home";
+        if(noteService.deleteNote(authentication.getName().toString(),noteid)<0){
+            model.addAttribute("deleteError","Failed to delete");
+        } else {
+            model.addAttribute("deleteSuccess",true);
+        }
+        return "result";
     }
 
     //Credential
@@ -136,21 +138,25 @@ public class HomeController {
 
         if (rowsAdded < 0) {
             error = "There was an error saving note. Please try again.";
+            model.addAttribute("credentialError", error);
         }
         if (error == null) {
             model.addAttribute("credentialSuccess", true);
         } else {
             model.addAttribute("credentialError", error);
         }
-        modelUpdate(authentication, model);
+        model.addAttribute("credentials",credentialService.getAllCredentials(authentication.getName().toString()));
         return "result";
     }
 
     //Delete Credential
     @GetMapping("/credential/delete/{credentialid}")
     public String deleteCredential(Authentication authentication, @PathVariable int credentialid, Model model) {
-        credentialService.deleteCredential(authentication.getName().toString(),credentialid);
-        model.addAttribute("credentials",credentialService.getAllCredentials(authentication.getName().toString()));
-        return "home";
+        if(credentialService.deleteCredential(authentication.getName().toString(),credentialid)<0){
+            model.addAttribute("deleteError","Failed to delete");
+        } else {
+            model.addAttribute("deleteSuccess",true);
+        }
+        return "result";
     }
 }

@@ -13,11 +13,11 @@ public class CloudStorageApplication {
 		SpringApplication.run(CloudStorageApplication.class, args);
 	}
 
-	@Bean
+/*	@Bean
 	CommandLineRunner init(UserService userService){
 		return (args) -> {
 			User user = new User(null,"1",null,"1","1","1");
 			userService.createUser(user);
 		};
-	}
+	}*/
 }

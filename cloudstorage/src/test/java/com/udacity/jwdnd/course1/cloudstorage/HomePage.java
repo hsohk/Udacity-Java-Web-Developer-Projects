@@ -16,7 +16,7 @@ public class HomePage {
 
     //Note
     @FindBy(id="nav-notes-tab")
-    private WebElement notesTab;
+    public WebElement notesTab;
 
     @FindBy(id="buttonNewNote")
     private WebElement newNoteButton;

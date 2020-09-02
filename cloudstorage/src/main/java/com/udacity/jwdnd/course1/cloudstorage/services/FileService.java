@@ -32,7 +32,7 @@ public class FileService {
     }
 
     public boolean isFileNameAvailable(String filename){
-        return fileMapper.getFileByName(filename)==null;
+        return (fileMapper.getFileByName(filename)==null)&& (!filename.isEmpty());
     }
 
     public int store(MultipartFile multipartFile, Integer userid) throws IOException {

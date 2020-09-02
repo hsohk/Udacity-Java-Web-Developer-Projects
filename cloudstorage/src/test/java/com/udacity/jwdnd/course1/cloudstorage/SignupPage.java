@@ -27,11 +27,12 @@ public class SignupPage {
         PageFactory.initElements(webDriver, this);
     }
 
-    public void signup(String firstName, String lastName, String username, String password){
+    public void signup(String firstName, String lastName, String username, String password) throws InterruptedException {
         this.firstNameField.sendKeys(firstName);
         this.lastNameField.sendKeys(lastName);
         this.usernameField.sendKeys(username);
         this.passwordField.sendKeys(password);
+        Thread.sleep(2000);
         submitButton.submit();
     }
 }

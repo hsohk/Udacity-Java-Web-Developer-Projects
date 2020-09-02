@@ -48,20 +48,26 @@ public class HomeController {
     public String uploadFile(Authentication authentication, @RequestParam("fileUpload") MultipartFile multipartFile, Model model) throws IOException {
         String uploadError = null;
         if(!fileService.isFileNameAvailable(multipartFile.getOriginalFilename())){
-            uploadError = "The filename already exists";
+            uploadError = "The filename already exists or filename was wrong";
             model.addAttribute("fileerror", uploadError);
         }
         if(uploadError==null){
             int userid = userService.findUseridByName(authentication.getName().toString());
-            int rowsAdded = fileService.store(multipartFile,userid);
-            if(rowsAdded<0){
+            try {
+                int rowsAdded = fileService.store(multipartFile, userid);
+                if(rowsAdded<0){
+                    uploadError = "There was an error uploading file. Please try again.";
+                }
+                if(uploadError == null){
+                    model.addAttribute("filesuccess",true);
+                } else {
+                    model.addAttribute("fileerror", uploadError);
+                }
+            } catch(IOException e){
                 uploadError = "There was an error uploading file. Please try again.";
-            }
-            if(uploadError == null){
-                model.addAttribute("filesuccess",true);
-            } else {
                 model.addAttribute("fileerror", uploadError);
             }
+
         }
         model.addAttribute("files",fileService.getAllFiles(authentication.getName().toString()));
         return "result";

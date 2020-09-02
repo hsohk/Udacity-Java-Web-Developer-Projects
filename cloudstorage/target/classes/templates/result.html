@@ -12,39 +12,39 @@
         <div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
             <div class="alert alert-success fill-parent" th:if="${filesuccess}">
                 <h1 class="display-5">File Saved</h1>
-                <span>Your file was successfully saved. Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Your file was successfully saved. Click <a id="file-save-continue" th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${fileerror}">
                 <h1 class="display-5">Error</h1>
                 <spanb th:text = "${fileerror}">Example Error Message</spanb>
-                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Click <a id="file-error-continue"   th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-success fill-parent" th:if="${noteSucess}">
                 <h1 class="display-5">Note Saved</h1>
-                <span>Your note was successfully saved. Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Your note was successfully saved. Click <a id="note-save-continue"  th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${noteError}">
                 <h1 class="display-5">Error</h1>
                 <spanb th:text = "${noteError}">Example Error Message</spanb>
-                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Click <a id="note-error-continue" th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-success fill-parent" th:if="${credentialSuccess}">
                 <h1 class="display-5">Credential Saved</h1>
-                <span>Your credential was successfully saved. Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Your credential was successfully saved. Click <a id="credential-save-continue" th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${credentialError}">
                 <h1 class="display-5">Error</h1>
                 <spanb th:text = "${noteError}">Example Error Message</spanb>
-                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Click <a id="credential-error-continue" th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-success fill-parent" th:if="${deleteSuccess}">
                 <h1 class="display-5">Deleted Successfully</h1>
-                <a th:href="@{/home}">here</a> to continue.</span>
+                <a id="delete-success-continue" th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${deleteError}">
                 <h1 class="display-5">Error</h1>
                 <spanb th:text = "${deleteError}">Example Error Message</spanb>
-                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Click <a id="delete-error-continue" th:href="@{/home}">here</a> to continue.</span>
             </div>
         </div>
     </body>

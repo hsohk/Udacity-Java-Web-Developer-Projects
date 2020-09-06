@@ -1,16 +1,19 @@
 package com.udacity.vehicles.api;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udacity.vehicles.client.maps.MapsClient;
 import com.udacity.vehicles.client.prices.PriceClient;
@@ -28,7 +31,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.objectweb.asm.TypeReference;
+import static org.mockito.Mockito.verify;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,6 +42,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 /**
  * Implements testing of the CarController class.
@@ -85,6 +90,7 @@ public class CarControllerTest {
     @Test
     public void createCar() throws Exception {
         Car car = getCar();
+        String tmp = json.write(car).getJson().toString();
         mvc.perform(
                 post(new URI("/cars"))
                         .content(json.write(car).getJson())
@@ -105,9 +111,16 @@ public class CarControllerTest {
          *   below (the vehicle will be the first in the list).
          */
         Car car = getCar();
-        String jsonResult = mvc.perform(get("/cars")).andReturn().getResponse().getContentAsString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Car> cars1 = objectMapper.readValue(jsonResult, new TypeReference<List<Car>>(){});
+//        String jsonResult = mvc.perform(get("/cars")).andReturn().getResponse().getContentAsString();
+        mvc.perform(get("/cars"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.carList").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.carList[0].details.body").value(car.getDetails().getBody()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.carList[0].details.model").value(car.getDetails().getModel()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.carList[0].details.mileage").value(car.getDetails().getMileage()))
+                .andExpect(status().isOk());
+        verify(carService,times(1)).list();
     }
 
     /**
@@ -120,6 +133,17 @@ public class CarControllerTest {
          * TODO: Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
+        Car car = getCar();
+//        String jsonResult = mvc.perform(get("/cars/1")).andReturn().getResponse().getContentAsString();
+        mvc.perform(get("/cars/"+car.getId()))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(car.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.details.body").value(car.getDetails().getBody()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.details.model").value(car.getDetails().getModel()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.details.mileage").value(car.getDetails().getMileage()))
+                .andExpect(status().isOk());
+        verify(carService,times(1)).findById(car.getId());
+
     }
 
     /**
@@ -133,6 +157,11 @@ public class CarControllerTest {
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
+        Car car = getCar();
+//       String jsonResult = mvc.perform(get("/cars/1")).andReturn().getResponse().getContentAsString();
+        mvc.perform(delete("/cars/1"))
+                .andExpect(status().is2xxSuccessful());
+        verify(carService,times(1)).delete((long) 1);
     }
 
     /**

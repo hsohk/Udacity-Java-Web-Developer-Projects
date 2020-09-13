@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.entity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Customer {
@@ -15,6 +16,9 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
     private List<Pet> pets;
+
+    @ManyToMany(mappedBy = "customerSet")
+    private Set<Schedule> scheduleSet;
 
     public void addPet(Pet pet){
         if(pets== null){

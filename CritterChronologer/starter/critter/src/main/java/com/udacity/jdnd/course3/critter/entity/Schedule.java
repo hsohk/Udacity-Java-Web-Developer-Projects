@@ -12,10 +12,12 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "schedule")
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Employee> employeeList;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Pet> petList;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Customer> customerSet;
     private LocalDate date;
     @Enumerated(EnumType.STRING)
     @ElementCollection
@@ -59,5 +61,13 @@ public class Schedule {
 
     public void setActivities(Set<EmployeeSkill> activities) {
         this.activities = activities;
+    }
+
+    public Set<Customer> getCustomerSet() {
+        return customerSet;
+    }
+
+    public void setCustomerSet(Set<Customer> customerSet) {
+        this.customerSet = customerSet;
     }
 }

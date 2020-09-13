@@ -4,6 +4,7 @@ import com.udacity.jdnd.course3.critter.pet.PetType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Pet {
@@ -20,8 +21,8 @@ public class Pet {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Schedule schedule;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "petList")
+    private List<Schedule> schedules;
 
     public long getId() {
         return id;
@@ -69,5 +70,13 @@ public class Pet {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 }

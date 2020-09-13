@@ -4,6 +4,7 @@ import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,8 +21,8 @@ public class Employee {
     @ElementCollection
     private Set<DayOfWeek> daysAvailable;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Schedule schedule;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "employeeList")
+    private List<Schedule> schedules;
 
     public long getId() {
         return id;
@@ -53,5 +54,13 @@ public class Employee {
 
     public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
         this.daysAvailable = daysAvailable;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 }

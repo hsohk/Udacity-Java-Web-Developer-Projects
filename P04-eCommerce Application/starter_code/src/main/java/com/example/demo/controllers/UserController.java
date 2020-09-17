@@ -55,17 +55,17 @@ public class UserController {
 		log.info("User name set with "+createUserRequest.getUsername());
 		Cart cart = new Cart();
 
-		if(createUserRequest.getPassword().length()<7 ||
+		if(createUserRequest.getPassword() == null || createUserRequest.getPassword().length()<7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
 			return ResponseEntity.badRequest().build();
 		}
 		SecureRandom random = new SecureRandom();
-//
-//		byte[] salt = new byte[16];
-//		String encodedSalt = Base64.getEncoder().encodeToString(salt);
-////		user.setSalt(encodedSalt);
-////		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()+encodedSalt));
-		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
+
+		byte[] salt = new byte[16];
+		random.nextBytes(salt);
+		String encodedSalt = Base64.getEncoder().encodeToString(salt);
+		user.setSalt(encodedSalt);
+		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()+encodedSalt));
 
 		cartRepository.save(cart);
 		user.setCart(cart);

@@ -30,9 +30,9 @@ public class User {
 	@Column(nullable = false)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
-	@Column(nullable = false)
-	@JsonProperty
-	private  String salt;
+//	@Column(nullable = false)
+//	@JsonProperty
+//	private  String salt;
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
@@ -63,13 +63,13 @@ public class User {
 		this.username = username;
 	}
 
-	public String getSalt() {
+/*	public String getSalt() {
 		return salt;
 	}
 
 	public void setSalt(String salt) {
 		this.salt = salt;
-	}
+	}*/
 
 	public String getPassword() {
 		return password;

@@ -56,20 +56,23 @@ public class UserController {
 		Cart cart = new Cart();
 
 		if(createUserRequest.getPassword() == null || createUserRequest.getPassword().length()<7 ||
-				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
+				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword()) ||
+				userRepository.findByUsername(createUserRequest.getUsername())!= null ){
+			log.info("createUser fail");
 			return ResponseEntity.badRequest().build();
 		}
-		SecureRandom random = new SecureRandom();
+//		SecureRandom random = new SecureRandom();
 
-		byte[] salt = new byte[16];
-		random.nextBytes(salt);
-		String encodedSalt = Base64.getEncoder().encodeToString(salt);
-		user.setSalt(encodedSalt);
-		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()+encodedSalt));
-
+//		byte[] salt = new byte[16];
+//		random.nextBytes(salt);
+//		String encodedSalt = Base64.getEncoder().encodeToString(salt);
+//		user.setSalt(encodedSalt);
+//		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()+encodedSalt));
+		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 		cartRepository.save(cart);
 		user.setCart(cart);
 		userRepository.save(user);
+		log.info("createUser success");
 		return ResponseEntity.ok(user);
 	}
 	

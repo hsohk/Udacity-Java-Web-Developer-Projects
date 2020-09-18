@@ -6,4 +6,5 @@
 */.idea/*.xml
 /target/
 **/target
+*.log
 
